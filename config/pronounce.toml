@@ -1,0 +1,25 @@
+# Pronunciación de nombres recurrentes para la voz (Kokoro-82M, G2P misaki, inglés americano).
+#
+# Lo lee src/producer/scenes.py (parse_script -> parse_units). Cada palabra SUELTA del guion
+# cuyo texto, sin la puntuación pegada y sin distinguir mayúsculas, coincide con una llave de
+# [words] se narra con el valor de esa llave; el subtítulo sigue mostrando la palabra original
+# y la puntuación pegada se conserva (pausa y entonación). Los grupos explícitos {pantalla|voz}
+# del guion no se tocan: mandan sobre este diccionario.
+#
+# Formato del valor:
+#   "/fonemas/"        fonemas misaki entre barras; se convierte en [Palabra](/fonemas/).
+#                      Alfabeto (US): A=eɪ  I=aɪ  O=oʊ  W=aʊ  Y=ɔɪ, más IPA: ə ɪ ɛ æ ʌ ɑ ɔ ʊ u i
+#                      ɹ ɾ ŋ ʃ ʒ ʧ ʤ θ ð ɡ ...; acento ˈ (primario) y ˌ (secundario) antes de la vocal.
+#                      Ver misaki/en.py (US_VOCAB). Una sola "palabra": sin espacios.
+#   "texto"            re-escritura (respelling) que la voz lee tal cual, p. ej. "explain roo".
+#
+# Elegidos el 2026-11-16 sintetizando frases con am_michael (velocidad 0,95 y 1,0) y
+# transcribiendo con faster-whisper large-v3-turbo: se quedó la forma que Whisper
+# escribe como la palabra real con más consistencia. Sin datos sensibles: se versiona.
+
+[words]
+Kokoro = "/kˈOkOɹO/"           # "KOH-koh-roh"; sin esto Whisper oye "Kakaro"/"Kikaro"
+explainroo = "explain roo"     # los fonemas /…ɹu/ juntos se oyen "ExplainRu"/"Explainroom"
+FFmpeg = "/ˌɛfˌɛfˈɛmpɛɡ/"      # sin esto misaki mete una pausa: "F. FMPEG", "FFM peg"
+ComfyUI = "/kˈʌmfijˌuˈI/"      # "comfy U-I"; fija la forma que ya sonaba bien
+Higgsfield = "/hˈɪɡzfild/"     # "Higgs" con z, como el bosón

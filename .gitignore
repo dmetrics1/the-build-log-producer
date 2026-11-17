@@ -1,0 +1,32 @@
+# local config and keys
+config.toml
+.env
+.env.*
+!.env.example
+secrets/
+client_secret*.json
+token*.json
+!assets/brand/tokens.json
+*.pem
+
+# outputs, media and models
+runs/
+assets/music/*
+!assets/music/music.md
+assets/recordings/
+assets/screens/
+models/
+.cache/
+*.gguf
+*.safetensors
+*.onnx
+*.pt
+*.pth
+*.mp4
+*.bundle
+
+# python / node
+__pycache__/
+*.egg-info/
+*.partial
+node_modules/

@@ -1,0 +1,20 @@
+{
+  "name": "tbl-scene3d",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The Build Log: 3D explainer scenes (Three.js via @remotion/three) in the paper theme",
+  "license": "UNLICENSED",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "bundle": "remotion bundle src/index.ts"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.8.2",
+    "@remotion/cli": "4.0.540",
+    "@remotion/three": "4.0.540",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.540",
+    "three": "0.187.0"
+  }
+}

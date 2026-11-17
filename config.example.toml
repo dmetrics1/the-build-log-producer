@@ -1,0 +1,72 @@
+# Producer configuration. Copy to config.toml (the Producer reads config.toml) and adjust.
+# No keys live here. Optional per-machine settings go in .env (HF_HOME, TBL_TMP_DIR).
+
+[channel]
+name = "The Build Log"
+language = "en"
+
+[voice]                      # fixed channel voice
+engine = "kokoro"
+model = "hexgrad/Kokoro-82M"
+voice = "am_echo"            # chosen after a voice shoot-out
+lang_code = "a"              # a = American English
+speed = 1.05                 # am_echo is slow; 1.05 + 0.35 s gaps ~ 155-160 wpm
+sample_rate = 24000
+
+[timeline]
+scene_gap_s = 0.35           # silence between one scene's voice and the next
+pad_in_s = 0.12              # part of that silence placed before each voice (the cut lands before the voice)
+tail_s = 0.8                 # silence at the end of the video
+
+[variants.fast]              # python -m producer produce <script> --variant fast -> final_fast.mp4
+voice_speed = 1.12
+scene_gap_s = 0.28
+
+[align]                      # word timestamps
+engine = "faster-whisper"
+model = "large-v3-turbo"
+device = "cuda"
+compute_type = "float16"
+mode = "full"                # one Whisper call over the whole narration ("scene": one per scene)
+
+[explain]                    # EXPLAIN scenes
+package = "explainroo@0.6.0"
+timeout_s = 90               # per attempt; a hang counts as a failure
+attempts = 3                 # 3 failures on one scene stop the run
+parallel = 3                 # scenes at once; measured: 1 -> 99 s, 2 -> 58 s, 3 -> 51 s, 4 -> 49 s
+workers = 4                  # Chromium pages per scene (explainroo --workers)
+
+[video]
+width = 1920
+height = 1080
+fps = 30
+crf = 18
+preset = "medium"
+min_scene_s = 2.0            # shorter scenes are merged into the previous one (scenes.plan_shots)
+theme = "paper"              # visual theme (src/producer/theme_paper.py)
+screen_parallel = 4          # SCREEN panels rendered at once
+max_speed = 4.0              # max speed-up of a SCREEN recording; beyond that, a warning
+
+[music]
+dir = "assets/music"         # licensed tracks + music.md (| file | title | artist | license | source | attribution |)
+                             # no tracks: a generated ambient tone, marked as placeholder in the manifest
+volume = 0.18                # under the voice, before ducking
+# ducking (sidechaincompress): 0.015 / 800 ms lowers ~13 dB without audible pumping
+duck_threshold = 0.015
+duck_ratio = 10
+duck_attack_ms = 15
+duck_release_ms = 800
+
+[affiliates]                 # disclosure texts (programs, optional: config/affiliates.toml)
+spoken = "Some links in the description are affiliate links."
+on_screen = "Affiliate link in description"
+description = "Some links are affiliate links; we earn a commission at no extra cost to you."
+max_start_s = 30             # the in-video disclosure starts before this second
+
+[paths]
+runs = "runs"                # relative to the project root
+# Intermediate files: TBL_TMP_DIR in .env, or %LOCALAPPDATA%\tbl-tmp by default
+
+[costs]                      # for the estimated cost per video
+laptop_watts = 140           # average laptop draw under load (estimate)
+kwh_price_usd = 0.22         # approximate electricity price
